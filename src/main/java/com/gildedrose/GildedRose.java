@@ -1,39 +1,7 @@
 package com.gildedrose;
 
-import com.gildedrose.qualitycontrol.QualityControl;
-import com.gildedrose.qualitycontrol.QualityControlOffice;
-import com.gildedrose.sellincontrol.SellInControl;
-
 class GildedRose {
-    // private QualityControlOffice qualityControlOffice;
-    // private SellInControl sellInControl;
-	// //private Item[] items;
-    
-    // //  public GildedRose(Item[] items) {
-    // //      this.items = items;
-    // //  }
-	
-	// public GildedRose(QualityControlOffice qualityControl, SellInControl sellInControl) {
-	// 	this.qualityControlOffice = qualityControl;
-	// 	this.sellInControl = sellInControl;
-	// }
 
-	// public void updateQuality(Item [] items) {
-        
-	// 	for (Item item : items) {
-	// 		udpateSellInFor(item);
-	// 		updateQualityFor(item);
-	// 	}
-	// }
-	
-	// private void updateQualityFor(Item item) {
-	// 	QualityControl qualityControl = qualityControlOffice.qualityControlFor(item);
-	// 	qualityControl.updateQualityFor(item);
-	// }
-
-	// private void udpateSellInFor(Item item) {
-	// 	sellInControl.updateSellInFor(item);
-	// }
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -42,35 +10,28 @@ class GildedRose {
 
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
-            if (!nameCheck(items[i].name) && !nameCheck(items[i].name)) {
-                if (this.greaterCheck(items[i].quality)) {
-                    if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                        items[i].quality = items[i].quality - 1;
-                    }
-                }
-            } else {
-                items[i].quality =  this.combineIf(items[i].quality,items[i].name, items[i].sellIn);
-            }
 
-            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                items[i].sellIn = items[i].sellIn - 1;
-            }
+            this.sulfur_check(items[i].name, items[i].quality, items[i].sellIn);
+            this.other_check(items[i].sellIn, items[i].name, items[i].quality);    
+        }
+    }
 
-            if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Aged Brie")) {
-                    if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (this.greaterCheck(items[i].quality ) && !items[i].name.equals("Sulfuras, Hand of Ragnaros"))  {
+
+    public void other_check(int sellIn, String name, int quality){
+        if (sellIn < 0) {
+            if (!name.equals("Aged Brie")) {
+                if (!name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+                    if (this.greaterCheck(quality ) && !name.equals("Sulfuras, Hand of Ragnaros"))  {
+    
+                            quality = quality - 1;
         
-                                items[i].quality = items[i].quality - 1;
-            
-                        }
-                    } else {
-                        items[i].quality = items[i].quality - items[i].quality;
                     }
                 } else {
-                    if (this.lesserCheck(items[i].quality)) {
-                        items[i].quality = items[i].quality + 1;
-                    }
+                    quality = quality - quality;
+                }
+            } else {
+                if (this.lesserCheck(quality)) {
+                    quality = quality + 1;
                 }
             }
         }
@@ -95,6 +56,23 @@ class GildedRose {
             }
         }
         return quality;
+    }
+
+
+    public  void sulfur_check(String name, int quality, int sellIn){
+        if (!nameCheck(name) && !nameCheck(name)) {
+            if (this.greaterCheck(quality)) {
+                if (!name.equals("Sulfuras, Hand of Ragnaros")) {
+                    quality = quality - 1;
+                }
+            }
+        } else {
+            quality =  this.combineIf(quality,name,sellIn);
+        }
+
+        if (!name.equals("Sulfuras, Hand of Ragnaros")) {
+            sellIn = sellIn - 1;
+        }
     }
     
     public boolean greaterCheck(int check){
